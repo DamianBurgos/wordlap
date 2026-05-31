@@ -14,6 +14,10 @@ const state = {
   currentCol: 0,
 };
 
+const keyStates = {};
+
+let gameOver = false;
+
 function drawGrid(container) {
   const grid = document.createElement('div');
   grid.className = 'grid';
@@ -33,7 +37,9 @@ function updateGrid() {
   for (let i = 0; i < state.grid.length; i++) {
     for (let j = 0; j < state.grid[i].length; j++) {
       const box = document.getElementById(`box${i}${j}`);
-      box.textContent = state.grid[i][j];
+      if (box) {
+        box.textContent = state.grid[i][j] ? state.grid[i][j] : '';
+      }
     }
   }
 }
@@ -48,29 +54,86 @@ function drawBox(container, row, col, letter = '') {
   return box;
 }
 
-function registerKeyboardEvents() {
-  document.body.onkeydown = (e) => {
-    const key = e.key;
-    if (key === 'Enter') {
-      if (state.currentCol === wordLength) {
-        const word = getCurrentWord();
-        if (isWordValid(word)) {
-          revealWord(word);
-          state.currentRow++;
-          state.currentCol = 0;
-        } else {
-          alert('Not a valid word.');
+function drawKeyboard() {
+  const keyboardContainer = document.getElementById('keyboard');
+  keyboardContainer.innerHTML = ''; 
+  keyboardContainer.className = 'keyboard-container';
+
+  const rows = [
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ñ'],
+    ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Backspace']
+  ];
+
+  rows.forEach(row => {
+    const rowElement = document.createElement('div');
+    rowElement.className = 'keyboard-row';
+
+    row.forEach(key => {
+      const button = document.createElement('button');
+      button.className = 'keyboard-button';
+      button.textContent = key === 'Backspace' ? '←' : key;
+      button.id = `key-${key.toLowerCase()}`;
+
+      if (key === 'Enter' || key === 'Backspace') {
+        button.classList.add('wide-button');
+      }
+
+      const keyLower = key.toLowerCase();
+      if (keyStates[keyLower]) {
+        button.classList.add(`key-${keyStates[keyLower]}`);
+      }
+
+      button.onclick = () => {
+        handleInput(key);
+      };
+
+      rowElement.appendChild(button);
+    });
+
+    keyboardContainer.appendChild(rowElement);
+  });
+}
+
+function handleInput(key) {
+  if (gameOver) return;
+
+  if (key === 'Enter') {
+    if (state.currentCol === wordLength) {
+      const word = getCurrentWord();
+      if (isWordValid(word)) {
+        revealWord(word);
+        state.currentRow++;
+        state.currentCol = 0;
+      } else {
+        showMessage('No existe ese piloto');
+
+        for (let i = 0; i < wordLength; i++) {
+          const box = document.getElementById(`box${state.currentRow}${i}`);
+          if (box) {
+            box.classList.add('shake');
+            
+            // Removemos la clase cuando termine la animación (250ms) 
+            // para que pueda volver a sacudirse el próximo intento
+            setTimeout(() => {
+              box.classList.remove('shake');
+            }, 250);
+          }
         }
       }
     }
-    if (key === 'Backspace') {
-      removeLetter();
-    }
-    if (isLetter(key)) {
-      addLetter(key);
-    }
+  } else if (key === 'Backspace') {
+    removeLetter();
+  } else if (isLetter(key)) {
+    addLetter(key);
+  }
 
-    updateGrid();
+  updateGrid();
+}
+
+function registerKeyboardEvents() {
+  document.body.onkeydown = (e) => {
+    handleInput(e.key);
   };
 }
 
@@ -79,7 +142,7 @@ function getCurrentWord() {
 }
 
 function isWordValid(word) {
-  return true;
+  return dictionary.map(w => w.toLowerCase()).includes(word.toLowerCase());
 }
 
 function getNumOfOccurrencesInWord(word, letter) {
@@ -102,20 +165,27 @@ function getPositionOfOccurrence(word, letter, position) {
   return result;
 }
 
+function updateKeyStatus(letter, status) {
+  const currentStatus = keyStates[letter];
+  if (currentStatus === 'right') return;
+  if (currentStatus === 'wrong' && status === 'empty') return;
+
+  keyStates[letter] = status;
+}
+
 function revealWord(guess) {
   const row = state.currentRow;
-  const animation_duration = 500; // ms
+  const animation_duration = 500;
 
   const isWinner = state.secret === guess;
   const isGameOver = (row === 4) && !isWinner;
 
   for (let i = 0; i < wordLength; i++) {
     const box = document.getElementById(`box${row}${i}`);
-    const letter = box.textContent;
-    const numOfOccurrencesSecret = getNumOfOccurrencesInWord(
-      state.secret,
-      letter
-    );
+    
+    const letter = state.grid[row][i].toLowerCase(); 
+    
+    const numOfOccurrencesSecret = getNumOfOccurrencesInWord(state.secret, letter);
     const numOfOccurrencesGuess = getNumOfOccurrencesInWord(guess, letter);
     const letterPosition = getPositionOfOccurrence(guess, letter, i);
 
@@ -125,33 +195,62 @@ function revealWord(guess) {
         letterPosition > numOfOccurrencesSecret
       ) {
         box.classList.add('empty');
+        updateKeyStatus(letter, 'empty');
       } else {
         if (letter === state.secret[i]) {
           box.classList.add('right');
+          updateKeyStatus(letter, 'right');
         } else if (state.secret.includes(letter)) {
           box.classList.add('wrong');
+          updateKeyStatus(letter, 'wrong');
         } else {
           box.classList.add('empty');
+          updateKeyStatus(letter, 'empty');
         }
       }
+      
       if (i === wordLength - 1) {
+        drawKeyboard();
+
         setTimeout(() => {
           if (isWinner) {
-            alert('¡Ganaste! Adivinaste el piloto');
+            gameOver = true;
+            showMessage('¡Ganaste! Adivinaste el piloto', true);
           } else if (isGameOver) {
-            alert(`¡Perdiste! El piloto era: ${state.secret.toUpperCase()}`);
+            gameOver = true;  
+            showMessage(`¡Perdiste! El piloto era: ${state.secret.toUpperCase()}`);
           }
         }, 100);
       }
-    }, ((i + 1) * animation_duration) / 2);
+      
+    }, ((i + 1) * animation_duration) / 3);
 
     box.classList.add('animated');
-    box.style.animationDelay = `${(i * animation_duration) / 2}ms`;
+    box.style.animationDelay = `${(i * animation_duration) / 3}ms`;
   }
 }
 
+function showMessage(message, isSuccess = false) {
+  const messageElement = document.getElementById('game-message');
+  messageElement.textContent = message;
+  
+  if (isSuccess) {
+    messageElement.classList.add('success');
+  } else {
+    messageElement.classList.remove('success');
+  }
+  
+if (gameOver) return;
+
+  setTimeout(() => {
+    if (!gameOver) {
+    messageElement.textContent = '';
+    }
+  }, 2000);
+}
+
 function isLetter(key) {
-  return key.length === 1 && key.match(/[a-z]/i);
+  return key.length === 1 && key.match(/[a-zñ]/i);
 }
 
 function addLetter(letter) {
@@ -169,7 +268,7 @@ function removeLetter() {
 function startup() {
   const game = document.getElementById('game');
   drawGrid(game);
-
+  drawKeyboard();
   registerKeyboardEvents();
 }
 
