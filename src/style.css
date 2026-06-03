@@ -182,26 +182,29 @@ body {
 @media (max-width: 600px) {
   html
   body {
-    height: auto;
-    min-height: 100vh;
+    height: 100vh;
+    height: -webkit-fill-available;
     overflow-y: auto;
   }
 
   .title {
     font-size: 2.2rem;
     margin-top: 0.8rem;
+    margin-bottom: 0rem;
   }
 
   #game {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
-    overflow-y: auto;
+    flex-grow: 1;
   }
 
   .grid {
     grid-template-columns: repeat(var(--word-length), max-content);
     width: 100%;
     justify-content: center;
+    padding: 0 4px;
+    box-sizing: border-box;
   }
 
   /* REPARADO: Ahora sí se calcula dinámicamente y no se pisa abajo */
@@ -214,9 +217,15 @@ body {
     max-height: 46px;
   }
   
+  hr {
+    margin: 0.2rem 0;
+  }
+
   .keyboard-container {
     margin-top: 0rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    padding: 0 4px;
+    max-width: 100%;
   }
 
   /* Compactamos el teclado verticalmente en celulares */
