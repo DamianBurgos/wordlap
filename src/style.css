@@ -26,10 +26,11 @@ body {
   flex-grow: 1;
 }
 
+/* ESTRUCTURA POR DEFECTO (PC) */
 .grid {
   display: grid;
-  grid-template-columns: repeat(var(--word-length, 5), auto);
-  grid-template-rows: repeat(5, auto);
+  /* Mantenemos un tamaño robusto en PC multiplicando por la cantidad de letras */
+  grid-template-columns: repeat(var(--word-length, 5), 56px);
   max-width: 100%;
   justify-content: center;
 }
@@ -67,15 +68,9 @@ body {
 }
 
 @keyframes flip {
-  0% {
-    transform: scaleY(1);
-  }
-  50% {
-    transform: scaleY(0);
-  }
-  100% {
-    transform: scaleY(1);
-  }
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(0); }
+  100% { transform: scaleY(1); }
 }
 
 .title {
@@ -91,11 +86,6 @@ body {
   color: rgb(245, 14, 14);
   font-size: 4.2rem;
   display: inline-block;
-}
-
-hr {
-  border-style: solid;
-  border-color: var(--empty);
 }
 
 .keyboard-container {
@@ -160,44 +150,6 @@ hr {
   font-size: 0.9rem;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(var(--word-length), max-content);
-    gap: 0px;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .box {
-    width: calc((85vw / var(--word-length)) - 8px); 
-    height: calc((85vw / var(--word-length)) - 8px);
-    margin: 4px;
-    font-size: calc(38vw / var(--word-length));
-  }
-
-  #game {
-    margin-top: 0.4rem;
-    margin-bottom: 0.4rem;
-  }
-
-  .box {
-    width: 42px;
-    height: 42px;
-    margin: 2px;
-    font-size: 1.8rem;
-  }
-  
-  .title {
-    font-size: 2.3rem;
-  }
-
-  .keyboard-button {
-    height: 44px;
-    margin: 0 2px;
-    font-size: 1rem;
-  }
-}
-
 .message-container {
   text-align: center;
   min-height: 18px;
@@ -222,4 +174,46 @@ hr {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-8px); }
   40%, 80% { transform: translateX(8px); }
+}
+
+/* =======================================================
+   AJUSTES EXCLUSIVOS PARA PANTALLAS DE CELULARES (MOBILE)
+   ======================================================= */
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(var(--word-length), max-content);
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* REPARADO: Ahora sí se calcula dinámicamente y no se pisa abajo */
+  .box {
+    width: calc((88vw / var(--word-length)) - 6px); 
+    height: calc((88vw / var(--word-length)) - 6px);
+    margin: 3px;
+    font-size: calc(42vw / var(--word-length));
+    max-width: 52px;
+    max-height: 52px;
+  }
+  
+  .title {
+    font-size: 2.2rem;
+    margin-top: 0.8rem;
+  }
+
+  #game {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  /* Compactamos el teclado verticalmente en celulares */
+  .keyboard-button {
+    height: 46px; 
+    margin: 0 2px;
+    font-size: 0.95rem;
+  }
+  
+  .keyboard-container {
+    margin-bottom: 0.8rem;
+  }
 }
