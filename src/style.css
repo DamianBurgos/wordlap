@@ -180,6 +180,24 @@ body {
    AJUSTES EXCLUSIVOS PARA PANTALLAS DE CELULARES (MOBILE)
    ======================================================= */
 @media (max-width: 600px) {
+  html
+  body {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .title {
+    font-size: 2.2rem;
+    margin-top: 0.8rem;
+  }
+
+  #game {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    overflow-y: auto;
+  }
+
   .grid {
     grid-template-columns: repeat(var(--word-length), max-content);
     width: 100%;
@@ -192,28 +210,19 @@ body {
     height: calc((88vw / var(--word-length)) - 6px);
     margin: 3px;
     font-size: calc(42vw / var(--word-length));
-    max-width: 52px;
-    max-height: 52px;
+    max-width: 46px;
+    max-height: 46px;
   }
   
-  .title {
-    font-size: 2.2rem;
-    margin-top: 0.8rem;
-  }
-
-  #game {
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
+  .keyboard-container {
+    margin-top: 0rem;
+    margin-bottom: 1rem;
   }
 
   /* Compactamos el teclado verticalmente en celulares */
   .keyboard-button {
-    height: 46px; 
+    height: 42px; 
     margin: 0 2px;
     font-size: 0.95rem;
-  }
-  
-  .keyboard-container {
-    margin-bottom: 0.8rem;
   }
 }
