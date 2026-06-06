@@ -88,39 +88,41 @@ function drawKeyboard() {
         handleInput(key);
       };
 
-      if (key === 'Backspace') {
-        let deleteInterval;
+    if (key === 'Backspace') {
+      let deleteInterval;
 
-        const startDeleting = (e) => {
-          e.preventDefault();
-          if (gameOver) return;
-          
+      const startDeleting = (e) => {
+        e.preventDefault();
+        if (gameOver) return;
+        
+        removeLetter();
+        updateGrid();
+
+        deleteInterval = setInterval(() => {
+          if (gameOver) {
+            clearInterval(deleteInterval);
+            return;
+          }
           removeLetter();
           updateGrid();
+        }, 100);
+      };
 
-          deleteInterval = setInterval(() => {
-            if (gameOver) {
-              clearInterval(deleteInterval);
-              return;
-            }
-            removeLetter();
-            updateGrid();
-          }, 100);
-        };
+      const stopDeleting = () => {
+        clearInterval(deleteInterval);
+      };
 
-        const stopDeleting = () => {
-          clearInterval(deleteInterval);
-        };
+      // Eventos para Mouse
+      button.addEventListener('mousedown', startDeleting);
+      button.addEventListener('mouseup', stopDeleting);
+      button.addEventListener('mouseleave', stopDeleting);
 
-        button.addEventListener('mousedown', startDeleting);
-        button.addEventListener('mouseup', stopDeleting);
-        button.addEventListener('mouseleave', stopDeleting);
+      // Eventos para Celulares
+      button.addEventListener('touchstart', startDeleting);
+      button.addEventListener('touchend', stopDeleting);
+    }
 
-        button.addEventListener('touchstart', startDeleting);
-        button.addEventListener('touchend', stopDeleting);
-      }
-
-      rowElement.appendChild(button);
+    rowElement.appendChild(button);
     });
 
     keyboardContainer.appendChild(rowElement);
@@ -144,7 +146,7 @@ function handleInput(key) {
           const box = document.getElementById(`box${state.currentRow}${i}`);
           if (box) {
             box.classList.add('shake');
-            
+
             setTimeout(() => {
               box.classList.remove('shake');
             }, 250);
@@ -152,11 +154,6 @@ function handleInput(key) {
         }
       }
     }
-  } else if (key === 'Backspace') {
-    removeLetter();
-  } else if (isLetter(key)) {
-    addLetter(key);
-  }
 
   updateGrid();
 }
