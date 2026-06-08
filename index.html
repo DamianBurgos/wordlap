@@ -15,12 +15,13 @@
   <body>
     <h1 class="title">Wordlap</h1>
     <div id="game"></div>
-    <div id="game-message" class="message-container"></div>
-    <hr />
-    <hr />
-<div style="text-align:center; margin-bottom: 6px;">
-  <button id="surrender-btn">Rendirse</button>
-</div>
+    <div style="flex-shrink: 0; text-align: center;">
+      <div id="game-message" class="message-container"></div>
+    </div>
+    <div style="flex-shrink: 0; text-align: center; padding: 5px 0 20px 0;">
+      <button id="surrender-btn">Rendirse</button>
+      <button id="refresh-btn" onclick="location.reload()">🔄 Nueva partida</button>
+    </div>
 <div id="keyboard"></div>
     <script defer src="./src/index.js" type="module"></script>
   </body>
