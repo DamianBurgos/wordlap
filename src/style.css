@@ -9,12 +9,13 @@
 html, body {
   background: var(--default);
   margin: 0;
-  padding: 0;
+  padding: 0rem 0;
   font-family: Arial, Helvetica, sans-serif;
   height: var(--real-vh);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  justify-content:space-between;
 }
 
 .title {
@@ -22,8 +23,8 @@ html, body {
   text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 2.8rem;
-  margin-top: 1rem;
-  margin-bottom: 0;
+  margin-top: 0px;
+  margin-bottom: 20px;
   flex-shrink: 0;
 }
 
@@ -32,8 +33,9 @@ html, body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  flex-grow: 1;
-  min-height: 0;
+  flex-grow: 0;
+  min-height: 5rem;
+  margin-bottom: 0px;
 }
 
 .grid {
@@ -41,6 +43,7 @@ html, body {
   grid-template-columns: repeat(var(--word-length, 5), 56px);
   max-width: 100%;
   justify-content: center;
+  margin-bottom: 0;
 }
 
 .box {
@@ -86,8 +89,8 @@ html, body {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1.1rem;
-  margin: 0.1rem 0;
-  flex-shrink: 0;
+  margin-top: 18px;
+  margin-bottom: 0.1rem;
   transition: opacity 0.2s ease;
 }
 
@@ -97,6 +100,7 @@ hr {
   flex-shrink: 0;
   margin: 4px 0;
   border-color: #3a3a3c;
+  display: none;
 }
 
 .keyboard-container {
@@ -105,7 +109,7 @@ hr {
   align-items: center;
   width: 100%;
   max-width: 480px;
-  margin: 0 auto 1.5rem auto;
+  margin: 0 auto 0rem auto;
   padding: 0 8px;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -140,18 +144,19 @@ hr {
 }
 
 #surrender-btn {
-  background: transparent;
-  border: 2px solid #3a3a3c;
-  color: #888;
+  background: #1a233a;
+  border: 2px solid #555;
+  color: white;
   padding: 6px 18px;
   border-radius: 4px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
 
 #surrender-btn:hover {
+  background: #2b3754;
   border-color: #ff4a4a;
   color: #ff4a4a;
 }
@@ -159,8 +164,24 @@ hr {
 #surrender-btn:disabled {
   opacity: 0.3;
   cursor: default;
-  border-color: #3a3a3c;
-  color: #888;
+}
+
+#refresh-btn {
+  background: #1a233a;
+  border: 2px solid #555;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-left: 8px;
+  display: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+#refresh-btn:hover {
+  background: #2b3754;
+  border-color: #aaa;
 }
 
 @media (hover: hover) {
@@ -185,6 +206,12 @@ hr {
     height: var(--real-vh);
   }
 
+  #surrender-btn {
+    font-size: 0.75rem;
+    padding: 4px 14px;
+    margin-bottom: 4px;
+  }
+  
   .title {
     font-size: 2rem;
     margin-top: 0.5rem;
