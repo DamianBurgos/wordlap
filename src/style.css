@@ -153,8 +153,7 @@ body {
    ======================================================= */
 @media (max-width: 600px) {
   html, body {
-    height: 100vh;
-    height: -webkit-fill-available;
+    height: 100dvh;
     overflow: hidden;
   }
 
@@ -165,7 +164,7 @@ body {
   }
 
   #game {
-    flex-grow: 0;
+    flex-grow: 1;
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
