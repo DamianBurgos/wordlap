@@ -266,6 +266,12 @@ function removeLetter() {
 }
 
 function startup() {
+  function setVh() {
+    document.documentElement.style.setProperty('--real-vh', window.innerHeight + 'px');
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+
   const game = document.getElementById('game');
   drawGrid(game);
   drawKeyboard();
