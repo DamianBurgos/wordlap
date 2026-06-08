@@ -139,6 +139,30 @@ hr {
   transition: background-color 0.2s ease;
 }
 
+#surrender-btn {
+  background: transparent;
+  border: 2px solid #3a3a3c;
+  color: #888;
+  padding: 6px 18px;
+  border-radius: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+#surrender-btn:hover {
+  border-color: #ff4a4a;
+  color: #ff4a4a;
+}
+
+#surrender-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  border-color: #3a3a3c;
+  color: #888;
+}
+
 @media (hover: hover) {
   .keyboard-button:hover { background-color: #2b3754; }
 }
