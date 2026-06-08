@@ -276,6 +276,13 @@ function startup() {
   drawGrid(game);
   drawKeyboard();
   registerKeyboardEvents();
+
+  document.getElementById('surrender-btn').addEventListener('click', () => {
+    if (gameOver) return;
+    gameOver = true;
+    document.getElementById('surrender-btn').disabled = true;
+    showMessage(`El piloto era: ${state.secret.toUpperCase()}`);
+  });
 }
 
 startup();
