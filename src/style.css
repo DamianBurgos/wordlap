@@ -151,9 +151,15 @@ body {
    AJUSTES EXCLUSIVOS PARA PANTALLAS DE CELULARES (MOBILE)
    ======================================================= */
 @media (max-width: 600px) {
-  html, body {
+  html {
+    height: 100dvh;
+  }
+
+  body {
     height: 100dvh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   .title {
@@ -164,8 +170,12 @@ body {
 
   #game {
     flex-grow: 1;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    flex-shrink: 1;
+    min-height: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .grid {
@@ -186,16 +196,10 @@ body {
   }
 
   .keyboard-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
-    padding: 8px 4px 12px 4px;
-    background: var(--default);
-    z-index: 10;
+    flex-shrink: 0;
+    margin: 0 auto 8px auto;
+    padding: 0 4px;
     max-width: 100%;
-    box-sizing: border-box;
   }
 
   .keyboard-row {
