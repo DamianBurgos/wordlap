@@ -168,6 +168,17 @@ body {
     margin-bottom: 0rem;
   }
 
+  #game-message {
+    flex-shrink: 0;
+  }
+
+  hr {
+    flex-shrink: 0;
+    margin: 4px 0;
+    border-color: #3a3a3c;
+  }
+
+
   #game {
     flex-grow: 1;
     flex-shrink: 1;
