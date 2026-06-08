@@ -108,13 +108,16 @@ function handleInput(key) {
       } else {
         showMessage('No existe ese piloto');
 
+        const btn = document.getElementById('surrender-btn');
+        btn.style.display = 'none';
+        setTimeout(() => {
+          btn.style.display = '';
+        }, 2000);
+
         for (let i = 0; i < wordLength; i++) {
           const box = document.getElementById(`box${state.currentRow}${i}`);
           if (box) {
             box.classList.add('shake');
-            
-            // Removemos la clase cuando termine la animación (250ms) 
-            // para que pueda volver a sacudirse el próximo intento
             setTimeout(() => {
               box.classList.remove('shake');
             }, 250);
@@ -215,9 +218,13 @@ function revealWord(guess) {
         setTimeout(() => {
           if (isWinner) {
             gameOver = true;
+            document.getElementById('surrender-btn').style.display = 'none';
+            document.getElementById('refresh-btn').style.display = 'inline-block';
             showMessage('¡Ganaste! Adivinaste el piloto', true);
           } else if (isGameOver) {
             gameOver = true;  
+            document.getElementById('surrender-btn').style.display = 'none';
+            document.getElementById('refresh-btn').style.display = 'inline-block';
             showMessage(`¡Perdiste! El piloto era: ${state.secret.toUpperCase()}`);
           }
         }, 100);
@@ -280,7 +287,8 @@ function startup() {
   document.getElementById('surrender-btn').addEventListener('click', () => {
     if (gameOver) return;
     gameOver = true;
-    document.getElementById('surrender-btn').disabled = true;
+    document.getElementById('surrender-btn').style.display = 'none';
+    document.getElementById('refresh-btn').style.display = 'inline-block';
     showMessage(`El piloto era: ${state.secret.toUpperCase()}`);
   });
 }
